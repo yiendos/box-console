@@ -64,7 +64,7 @@ class Init extends Command
 
         `touch .gitignore`;
         `echo ".git-ftp*" > .gitignore`;
-
+        `git add README.md`;
         `git add -A`;
         `git commit -a -m "Initial commit"`;
     }
