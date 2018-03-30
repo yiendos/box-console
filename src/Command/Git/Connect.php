@@ -62,6 +62,12 @@ class Connect extends Command
     {
         $result = shell_exec('git --version >/dev/null 2>&1 || { echo "false"; }');
 
+        if (trim($result) == 'false')
+        {
+            throw new \RuntimeException(sprintf('Git cannot be found, install this first'));
+            return;
+        }
+
         if (!is_dir($this->target_dir))
         {
             throw new \RuntimeException(sprintf("Target site doesn't exist, first create through `box git:init`"));
@@ -72,12 +78,6 @@ class Connect extends Command
         {
             $output->writeLn('Changing to site directory');
             chdir($this->target_dir);
-        }
-
-        if (trim($result) == 'false')
-        {
-            throw new \RuntimeException(sprintf('Git cannot be found, install this first'));
-            return;
         }
 
         //does the remote already exist, if so stop now
