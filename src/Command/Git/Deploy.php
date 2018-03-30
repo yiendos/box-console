@@ -22,7 +22,7 @@ class Deploy extends Command
     protected function configure()
     {
         $this
-            ->setName('site:deploy')
+            ->setName('git:deploy')
             ->setDescription('Deploy your website with git-ftp')
             ->addArgument(
                 'server',
