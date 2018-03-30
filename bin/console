@@ -12,6 +12,7 @@ $application = new Application();
 
 $application->add(new \App\Command\Git\Init);
 $application->add(new \App\Command\Git\Connect);
+$application->add(new \App\Command\Git\Deploy);
 $application->add(new \App\Command\Git\Config);
 
 $application->run();
