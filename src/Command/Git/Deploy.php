@@ -12,6 +12,7 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use App\Command\AbstractClass;
 
 class Deploy extends Command
 {
@@ -21,6 +22,8 @@ class Deploy extends Command
 
     protected function configure()
     {
+        parent::configure();
+
         $this
             ->setName('git:deploy')
             ->setDescription('Deploy your website with git-ftp')
@@ -28,20 +31,6 @@ class Deploy extends Command
                 'server',
                 InputArgument::REQUIRED,
                 'FTP server to deploy to. You can add a different port or subdirectory. Example: ftp://ftp.domain.com:21/httpdocs'
-            )
-
-            ->addArgument(
-                'site',
-                InputArgument::REQUIRED,
-                'Alphanumeric site name. Also used in the site URL with .test domain'
-            )
-
-            ->addOption(
-                'www',
-                null,
-                InputOption::VALUE_REQUIRED,
-                "Web server root",
-                '/var/www'
             )
 
             ->addOption(
@@ -63,9 +52,8 @@ class Deploy extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $this->site       = $input->getArgument('site');
-        $this->www        = $input->getOption('www');
-        $this->target_dir = $this->www.'/'.$this->site;
+        parent::execute($input, $output);
+
         $this->server   = $input->getArgument('server');
         $this->user     = $input->getOption('user');
         $this->password = $input->getOption('password');

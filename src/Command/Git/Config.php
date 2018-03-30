@@ -7,11 +7,14 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use App\Command\AbstractClass;
 
-class Config extends Command
+class Config extends AbstractClass
 {
     protected function configure()
     {
+        parent::configure();
+
         $this
             // the name of the command (the part after "bin/console")
             ->setName('git:config')
@@ -22,12 +25,6 @@ class Config extends Command
             // the full command description shown when running the command with
             // the "--help" option
             ->setHelp('Quickly change repo settings...')
-
-            ->addArgument(
-                'site',
-                InputArgument::REQUIRED,
-                'Alphanumeric site name. Also used in the site URL with .test domain'
-            )
 
             ->addOption(
                 'config',
@@ -51,22 +48,13 @@ class Config extends Command
                 'do you wish to update global details',
                 false
             )
-
-            ->addOption(
-                'www',
-                null,
-                InputOption::VALUE_REQUIRED,
-                "Web server root",
-                '/var/www'
-            )
         ;
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $this->site       = $input->getArgument('site');
-        $this->www        = $input->getOption('www');
-        $this->target_dir = $this->www . '/' . $this->site;
+        parent::execute($input, $output);
+
         $this->config     = $input->getOption('config');
         $this->list    = $input->getOption('list');
         $this->global     = $input->getOption('global');

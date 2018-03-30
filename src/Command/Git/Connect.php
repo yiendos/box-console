@@ -7,11 +7,14 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use App\Command\AbstractClass;
 
-class Connect extends Command
+class Connect extends AbstractClass
 {
     protected function configure()
     {
+        parent::configure();
+
         $this
             // the name of the command (the part after "bin/console")
             ->setName('git:connect')
@@ -24,33 +27,18 @@ class Connect extends Command
             ->setHelp('Start a git repo for your code...')
 
             ->addArgument(
-                'site',
-                InputArgument::REQUIRED,
-                'Alphanumeric site name. Also used in the site URL with .test domain'
-            )
-
-            ->addArgument(
                 'remote',
                 InputArgument::REQUIRED,
                 'Provide the remote origin'
-            )
-
-            ->addOption(
-                'www',
-                null,
-                InputOption::VALUE_REQUIRED,
-                "Web server root",
-                '/var/www'
             )
         ;
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $this->site       = $input->getArgument('site');
-        $this->www        = $input->getOption('www');
-        $this->target_dir = $this->www . '/' . $this->site;
-        $this->remote     = $input->getArgument('remote');
+        parent::execute($input, $output);
+
+        $this->remote = $input->getArgument('remote');
 
         $this->check($input, $output);
 

@@ -7,11 +7,14 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use App\Command\AbstractClass;
 
-class Init extends Command
+class Init extends AbstractClass
 {
     protected function configure()
     {
+        parent::configure();
+
         $this
             // the name of the command (the part after "bin/console")
             ->setName('git:init')
@@ -22,49 +25,19 @@ class Init extends Command
             // the full command description shown when running the command with
             // the "--help" option
             ->setHelp('Start a git repo for your code...')
-
-            ->addArgument(
-                'site',
-                InputArgument::REQUIRED,
-                'Alphanumeric site name. Also used in the site URL with .test domain'
-            )
-
-            ->addOption(
-                'www',
-                null,
-                InputOption::VALUE_REQUIRED,
-                "Web server root",
-                '/var/www'
-            )
         ;
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $this->site       = $input->getArgument('site');
-        $this->www        = $input->getOption('www');
-        $this->target_dir = $this->www . '/' . $this->site;
+        parent::execute($input, $output);
 
         $this->check($input, $output);
 
-        if (!is_dir($this->target_dir))
-        {
-            $output->writeln("Target directory doesn't exist creating it");
-
-            `mkdir -p $this->target_dir`;
-        }
-
-        if ($this->target_dir != shell_exec('pwd'))
-        {
-            $output->writeLn('Changing to site directory');
-            chdir($this->target_dir);
-        }
-
         passthru('git init');
 
-        `touch .gitignore`;
+        `touch .gitignore README.md`;
         `echo ".git-ftp*" > .gitignore`;
-        `git add README.md`;
         `git add -A`;
         `git commit -a -m "Initial commit"`;
     }
@@ -84,5 +57,14 @@ class Init extends Command
             throw new \RuntimeException(sprintf('Git already initialized'));
             return;
         }
+
+        if (!is_dir($this->target_dir))
+        {
+            $output->writeln("Target directory doesn't exist creating it");
+
+            `mkdir -p $this->target_dir`;
+        }
+
+        parent::check($input, $output);
     }
 }
