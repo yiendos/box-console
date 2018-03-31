@@ -43,7 +43,10 @@ class AbstractClass extends Command
 
     protected function check(InputInterface $input, OutputInterface $output)
     {
-        if ($this->target_dir != shell_exec('pwd'))
+        $current_dir = shell_exec('pwd');
+
+        //@todo this doesn't actually work because it returns home/vagrant/Projects
+        if ($this->target_dir != $current_dir)
         {
             $output->writeLn('Changing to site directory');
             chdir($this->target_dir);

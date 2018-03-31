@@ -15,5 +15,7 @@ $application->add(new \App\Command\Git\Connect);
 $application->add(new \App\Command\Git\Deploy);
 $application->add(new \App\Command\Git\Config);
 
+$application->add(new \App\Command\Codeception\Init());
+
 $application->run();
 
