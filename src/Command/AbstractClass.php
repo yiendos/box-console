@@ -16,8 +16,14 @@ class AbstractClass extends Command
 
     protected $www;
 
+    protected static $files;
+
     protected function configure()
     {
+        if (empty(self::$files)) {
+            self::$files = $this->getTemplatePath();
+        }
+
         $this
             ->addArgument(
         'site',
@@ -51,5 +57,13 @@ class AbstractClass extends Command
             $output->writeLn('Changing to site directory');
             chdir($this->target_dir);
         }
+    }
+
+    //@todo come back to this to avoid hardcoded paths
+    public static function getTemplatePath()
+    {
+        $root = dirname(dirname(dirname(dirname(__DIR__))));
+
+        return $root . DIRECTORY_SEPARATOR . "Projects" . DIRECTORY_SEPARATOR . 'box-console' . DIRECTORY_SEPARATOR . 'bin' . DIRECTORY_SEPARATOR . '.files';
     }
 }

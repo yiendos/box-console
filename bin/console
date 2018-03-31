@@ -17,5 +17,7 @@ $application->add(new \App\Command\Git\Config);
 
 $application->add(new \App\Command\Codeception\Init());
 
+$application->add(new \App\Command\Travis\Init());
+
 $application->run();
 
